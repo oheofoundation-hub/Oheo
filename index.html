@@ -569,7 +569,7 @@
     <p style="color:rgba(255,255,255,.65);">Prevention begins with You</p>
   </div>
   <div class="form-wrapper">
-    <form id="clientForm" onsubmit="handleSubmit(event)">
+    <form id="clientForm" action="https://formspree.io/f/xojrwgad" method="POST" onsubmit="handleSubmit(event)">
       <div class="form-grid">
 
         <div class="form-group form-full">
@@ -658,10 +658,24 @@
 <script>
 function handleSubmit(e) {
   e.preventDefault();
-  document.getElementById('clientForm').style.display = 'none';
-  const s = document.getElementById('successMsg');
-  s.style.display = 'block';
-  window.scrollTo({ top: document.getElementById('onboarding').offsetTop, behavior: 'smooth' });
+  const form = document.getElementById('clientForm');
+  const data = new FormData(form);
+  fetch('https://formspree.io/f/xojrwgad', {
+    method: 'POST',
+    body: data,
+    headers: { 'Accept': 'application/json' }
+  }).then(response => {
+    if (response.ok) {
+      form.style.display = 'none';
+      const s = document.getElementById('successMsg');
+      s.style.display = 'block';
+      window.scrollTo({ top: document.getElementById('onboarding').offsetTop, behavior: 'smooth' });
+    } else {
+      alert('Something went wrong. Please try again or contact us directly.');
+    }
+  }).catch(() => {
+    alert('Network error. Please check your connection and try again.');
+  });
 }
 // Scroll reveal
 const observer = new IntersectionObserver((entries) => {
